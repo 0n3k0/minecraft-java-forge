@@ -1,0 +1,61 @@
+// Prerequirements
+	- minecraft java edition 1.21.10
+	- java 1.21
+	- minecraft-forge 1.21.10
+
+
+
+// Deployment & Configuration
+
+1. Javaのインストール (Java入れてない人)
+	- 以下のサイトのwindowsをDL
+  https://adoptium.net/temurin/releases?version=21&os=any&arch=any
+
+  - DLしたインストーラーをクリックしてインストール
+
+  - (オプションなのでやらなくてもいい) コマンドプロンプトで確認
+  $ java -version
+  openjdk version "21.0.9" 2025-10-21 LTS
+  OpenJDK Runtime Environment Temurin-21.0.9+10 (build 21.0.9+10-LTS)
+  OpenJDK 64-Bit Server VM Temurin-21.0.9+10 (build 21.0.9+10-LTS, mixed mode, sharing)
+
+
+2. Minecraft Forgeのインストール
+  - Forgeのサイトにgo
+  https://files.minecraftforge.net/net/minecraftforge/forge/
+
+  - 1.21.10のInstallerをクリック
+  - 5秒ぐらい待つと画面右上にSKIPというボタンがでるのでSKIPをクリック
+  - ファイルがDLされるのを待つ
+
+  - DLしたインストーラーをクリック (forge-1.21.10-60.1.0-installer.jar)
+  - Install Clientを選択 > OK
+  - Successfully Installedならたぶん成功しているはず
+
+
+3. Minecraft Launcherを起動
+  - 1.21.10-forge-60.1.0が表示されていること
+  表示されていない人はなにかがおかしいのでトラシューしましょう
+  
+
+4. Forgeの起動構成の変更
+  - Launcherの起動構成をクリック > 編集 > 保存
+  名前: 適当に入れる (例 forge-1.21.10)
+  バージョン: release 1.21.10-forge-60.1.0
+  ディレクトリ: 任意でいいけど事前にディレクトリを作っておくといいかも
+  例: C:\Users\[名前]\AppData\Roaming\.minecraft\forge\1.21.10-forge-60.1.0
+
+
+
+5. 起動確認
+  - 1.21.10-forge-60.1.0を選択して起動
+  - Language: 日本語選択
+  - 起動した画面にModが表示されていればOK
+
+
+
+
+
+// Reference (このあたりを参考にするとよき)
+https://games.xserver.ne.jp/minecraft-media/minecraft-forge/
+
