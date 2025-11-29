@@ -27,7 +27,7 @@
 - Successfully Installedを確認
   
 ### 3. Minecraft Launcherを起動
-  - Launcherに1.20.1-forge-47.4.10が表示されていること
+  - Launcherに1.20.1-forge-47.4.10が表示されていること  
   表示されていない人はなにかがおかしいのでトラシューしましょう
   
 
