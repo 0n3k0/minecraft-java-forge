@@ -12,7 +12,7 @@
 - **JDK17-LTS**のWindowsをダウンロード   
 [https://adoptium.net/temurin/releases?version=21&os=any&arch=any](https://adoptium.net/temurin/releases?version=17&os=any&arch=any)  
 - DLしたインストーラー(OpenJDK17U-jdk_x64_windows_hotspot_17.0.17_10)をクリックしウィザードに従いインストール  
-- コマンドプロンプトを開き以下のコマンドを実行、openjdk version "17.0.17"と出れば成功 (注:コマンド苦手な人はやらなくてもいい)    
+- コマンドプロンプトでjava versionを確認 (openjdk version "17.0.17" )    
 ```$ java -version```
  
 ### 2. Install Minecraft Forge
@@ -34,7 +34,7 @@
   - Launcherの起動構成をクリックして編集  
 名前: 適当に入れる (例 forge-1.21.10)  
 バージョン: release 1.20.1-forge-47.4.10  
-ディレクトリ: 任意（事前にディレクトリを作っておくといいかも）  
+ディレクトリ: 任意（事前にディレクトリを作っておく）  
 例: C:\Users\[名前]\AppData\Roaming\.minecraft\forge\1.20.1-forge-47.4.10  
 
 
