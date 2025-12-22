@@ -15,7 +15,7 @@
 - コマンドプロンプトを開き以下のコマンドを実行、openjdk version "17.0.17"と出れば成功 (注:コマンド苦手な人はやらなくてもいい)    
 ```$ java -version```
  
-### 2. Minecraft Forgeのインストール
+### 2. Install Minecraft Forge
 - Forgeのサイトにgo  
   https://files.minecraftforge.net/net/minecraftforge/forge/
 - 左ペインで**1.20.1**を選択 (マルチサーバのバージョンとあわせる)
