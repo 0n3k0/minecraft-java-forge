@@ -7,7 +7,7 @@
  
 ## Deployment & Configuration
 
-### 1. Javaのインストール (Javaをインストールしていない人)
+### 1. Install Java
 - AdoptiumのサイトへGo  
 - **JDK17-LTS**のWindowsをダウンロード   
 [https://adoptium.net/temurin/releases?version=21&os=any&arch=any](https://adoptium.net/temurin/releases?version=17&os=any&arch=any)  
@@ -26,12 +26,11 @@
 - Install Clientを選択し、OK
 - Successfully Installedを確認
   
-### 3. Minecraft Launcherを起動
-  - Launcherに1.20.1-forge-47.4.10が表示されていること  
-  表示されていない人はなにかがおかしいのでトラシューしましょう
+### 3. Launch Minecraft Launcher
+  - Launcherに1.20.1-forge-47.4.10が表示されていること
   
 
-### 4. Forgeの起動構成の変更
+### 4. Modify startup-config of Forge
   - Launcherの起動構成をクリックして編集  
 名前: 適当に入れる (例 forge-1.21.10)  
 バージョン: release 1.20.1-forge-47.4.10  
@@ -39,13 +38,12 @@
 例: C:\Users\[名前]\AppData\Roaming\.minecraft\forge\1.20.1-forge-47.4.10  
 
 
-### 5. 起動確認
+### 5. Execute Forge
   - 1.20.1-forge-47.4.10を選択して起動
   - Language: 日本語選択
   - 起動した画面にModが表示されていればOK
 
 
 ## References
- このあたりを参考にするとよいかもしれない  
 https://games.xserver.ne.jp/minecraft-media/minecraft-forge/
 
