@@ -4,16 +4,24 @@ Oracle Cloud Infrastracture(OCI)のFree Tier(ARM)にマイクラ鯖をたてる�
 
 ## Requirements
 - OCIのFree tierのアカウント(https://www.oracle.com/jp/cloud/free/)
-  * 有料サブスクリプションにアップグレードした方がいいかも、無料枠のリソース不足で確保できない
+  * 有料サブスクリプションにアップグレードした方がよさそう。無料枠だとリソース不足でエラーになる
 - ssh ツール (powershellとかなんでも)
 - 
   
 
 
 ## Deployment & Configuration
-### 1.Deploy OCI instance
+### 1.Create compartment
 
-基本情報 
+コンパートメント 
+<img width="1307" height="466" alt="Screenshot 2025-12-23 at 15 16 37" src="https://github.com/user-attachments/assets/e3c254a7-a9bc-4b88-a393-e6db92be87b9" /> 
+<img width="1288" height="529" alt="Screenshot 2025-12-23 at 15 19 59" src="https://github.com/user-attachments/assets/cdef06d4-1c95-43dd-a2ef-35289f172a1e" />  
+  
+
+
+
+### 2.Deploy instance
+インスタンス 
 - 名前: 任意 (minecraft-forge-1.20.1) 
 - コンパートメント: デフォルト 
 - 配置: AD1 (OENr:AP-OSAKA-1-AD-1) 
@@ -51,10 +59,10 @@ SSHキーの追加
 
 ![Screenshot_22-12-2025_23746_cloud oracle com](https://github.com/user-attachments/assets/127e2a12-a974-470c-8d53-2b06ed6d13d1)
 ![Screenshot_22-12-2025_23918_cloud oracle com](https://github.com/user-attachments/assets/c3bd8eb8-f961-4aa2-8ef2-a84cb831e8b3)
+  
 
 
-
-### 2. Create Network
+### 3. Create Network
 
 ![Screenshot_22-12-2025_231321_cloud oracle com](https://github.com/user-attachments/assets/f9d0071b-2644-4b38-b63e-e769521bf6b2) 
 ![Screenshot_22-12-2025_231356_cloud oracle com](https://github.com/user-attachments/assets/90f010fa-0498-4992-bd9a-d18f2e7da5bd) 
@@ -78,7 +86,8 @@ SSHキーの追加
  ```ssh -i ~/[sssh key] opc@xx.xxx.xxx.xxx```
 
 
-
+### 4. Add security rule for minecraft
+- マイクラ用のポートをセキュリティ・ルールに追加 
 
 
 
