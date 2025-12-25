@@ -1,2 +1,2 @@
 # minecraft-java-forge
-Configuration for minecraft forge
+Installation and Configuration for Minecraft Forge
