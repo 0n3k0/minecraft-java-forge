@@ -1,22 +1,26 @@
 # How to deploy Minecraft Forge server on OCI 
-Oracle Cloud Infrastracture(OCI)の無料枠のARMサーバーにMinecraft Forge鯖をたてる手順
+Oracle Cloud Infrastracture(OCI)の無料枠のARM VMにOracle Linuxを入れて、Minecraft Forge鯖をたてる手順
   
 ## Requirements
 - OCIのFree Tierアカウント(https://www.oracle.com/jp/cloud/free/) 
-* Tokyo Regionはリソースに空きがないらしいので、Osaka Regionを選択した方がいい 
-* Free tierのままだとOsakaでもリソースがないというapiエラーになるが、有料サブスクリプションにアップグレードしたら解決 (無料の範囲で使えば課金されない) 
+  - Tokyo Regionはリソースに空きがないらしいのでOsakaを選択した方がいい
+  - Free TierのままだとOsakaでもリソースがないというapiエラーになる。有料サブスクリプションにアップグレードしたら解決 (無料の範囲で使えば課金されない)
+- SSHクライアント(e.g.PowerShell)
+- Java 1.17
+- Minecraft-forge 1.20.1 
+
+    
+3,000 OCPU hours and 18,000 GB hours per month > 4OCPU & 24GB per 31 days  
+![Screenshot_25-12-2025_143824_www oracle com](https://github.com/user-attachments/assets/1f414f1f-7bd1-49dd-9450-87becf50aded) 
   
-![Screenshot_25-12-2025_143824_www oracle com](https://github.com/user-attachments/assets/1f414f1f-7bd1-49dd-9450-87becf50aded)
+  
 
-
-- ssh tool (e.g.PowerShell)
-- java 1.17
-- minecraft-forge 1.20.1
   
 
 ---
 ## 1. Deployment & Configuration OCI env.   
 ### 1-1.Create compartment
+- サブコンパートメントの作成(作らなくても動くけど作った方がいい) 
 
 <img width="1307" height="466" alt="Screenshot 2025-12-23 at 15 16 37" src="https://github.com/user-attachments/assets/e3c254a7-a9bc-4b88-a393-e6db92be87b9" /> 
 <img width="1288" height="529" alt="Screenshot 2025-12-23 at 15 19 59" src="https://github.com/user-attachments/assets/cdef06d4-1c95-43dd-a2ef-35289f172a1e" />  
@@ -82,13 +86,13 @@ SSHキーの追加
 
 ### 1-4.Check to access the instance by ssh 
 
-- 開発者シェル > Cloud Shell または other tool (e.g. PowerShell)  
-- 歯車マークからプライベートキーをアップロード 
+- 開発者シェル > Cloud Shell または PowerShellnなどのSSHクライアントを起動  
+- private keyファイルをクライアントに設定(Cloud Shellの場合は歯車からkeyファイルをアップロード、PowerShellの場合は~/.ssh/配下に配置)
 - keyファイルのパーミッション変更
 ```bash
  chmod 600 [ssh-key file] 
 ```
-- ssh接続確認 
+- ssh接続確認(Oracle Linuxの場合はユーザー名はopc) 
  ```bash
 ssh -i ~/[sssh key] opc@xx.xxx.xxx.xxx 
 ```
@@ -99,7 +103,7 @@ ssh -i ~/[sssh key] opc@xx.xxx.xxx.xxx
   ![Screenshot_25-12-2025_132350_cloud oracle com](https://github.com/user-attachments/assets/10901b49-4ef2-452f-a7ee-2dcb43a7c172)
   ![Screenshot_25-12-2025_13247_cloud oracle com](https://github.com/user-attachments/assets/5357bcd9-257e-499e-b81e-c45526af2cbd)
   
-- Linux側でもポートの穴あけ
+- Linux側もポートの穴あけ
  ```bash
  sudo firewall-cmd --add-port=25565/tcp --permanent 
  sudo firewall-cmd --reload
@@ -107,7 +111,7 @@ ssh -i ~/[sssh key] opc@xx.xxx.xxx.xxx
   
 ---
 ## 3.Install Java  
-- repoが設定されているか確認 
+- repositoryが設定されているか確認 
   ```bash
   sudo dnf repolist
   ```
@@ -121,51 +125,51 @@ ssh -i ~/[sssh key] opc@xx.xxx.xxx.xxx
   ```bash
   java -version
   ```
--  Forgeの最新バージョンを確認してDLする(e.g. 1.20.1-47.4.13)
- ```bash
-curl -s https://files.minecraftforge.net/net/minecraftforge/forge/maven-metadata.json | grep 1.20.1
-```
- ```bash
-mkdir forge-server-1.20.1-47
-cd forge-server-1.20.1-47
-```
-```bash
-wget https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.20.1-47.4.13/forge-1.20.1-47.4.13-installer.jar
-```
-```bash
-ls -lh forge-1.20.1-47.4.13-installer.jar
-```
+  
   
 ---
 ## 4.Install and configure Minecraft Forge
-```bash
-java -jar forge-1.20.1-47.4.13-installer.jar --installServer
-```
-
+-  Forgeの最新バージョンを確認してDLする(e.g. 1.20.1-47.4.13)
+ ```bash
+  curl -s https://files.minecraftforge.net/net/minecraftforge/forge/maven-metadata.json | grep 1.20.1 
+  ```
+- インストールディレクトリを作成してインストーラーをDL 
+ ```bash
+  mkdir forge-server-1.20.1-47
+  cd forge-server-1.20.1-47
+  ```
+  ```bash
+  wget https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.20.1-47.4.13/forge-1.20.1-47.4.13-installer.jar
+  ```
+  ```bash
+  ls -lh forge-1.20.1-47.4.13-installer.jar
+  ```
+- インストーラーを実行 
+  ```bash
+  java -jar forge-1.20.1-47.4.13-installer.jar --installServer
+  ```
 - EURAファイルを生成
-```bash
-./run.sh
-```
-
+  ```bash
+  ./run.sh
+  ```
 - EULAに同意する (生成されたeula.txtに記載のeura=faulseをtrueに変更)
-```bash
-vi eula.txt
-```
+  ```bash
+  vi eula.txt
+  ```
 
-```bash
-$ cat eula.txt 
-eula=true
-```
-
-- argsの変更 (メモリを増やす -Xmx16G、-Xms4G) 
-```bash
-vi user_jvm_args.txt
-```
-```bash
-$ cat user_jvm_args.txt
--Xms4G
--Xmx16G
-```
+  ```bash
+  $ cat eula.txt 
+  eula=true
+  ```
+- argsの変更 (最大最小のメモリを増やす、-Xms4G -Xmx16G) 
+  ```bash
+  vi user_jvm_args.txt
+  ```
+  ```bash
+  $ cat user_jvm_args.txt
+  -Xms4G
+  -Xmx16G
+  ```
   
 
   
