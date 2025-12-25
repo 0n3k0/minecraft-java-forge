@@ -1,26 +1,45 @@
-# How to deploy Minecraft forge server on OCI 
-Oracle Cloud Infrastracture(OCI)のFree Tier(ARM)にマイクラ鯖をたてる手順
-
-
+# How to deploy Minecraft Forge server on OCI 
+Oracle Cloud Infrastracture(OCI)の無料枠のARMサーバーにMinecraft Forge鯖をたてる手順
+  
 ## Requirements
-- OCIのFree tierのアカウント(https://www.oracle.com/jp/cloud/free/)
-  * 有料サブスクリプションにアップグレードした方がよさそう。無料枠だとリソース不足でエラーになる
-- ssh ツール (powershellとかなんでも)
-- 
+- OCIのFree Tierアカウント(https://www.oracle.com/jp/cloud/free/) 
+* Tokyo Regionはリソースに空きがないらしいので、Osaka Regionを選択した方がいい 
+* Free tierのままだとOsakaでもリソースがないというapiエラーになるが、有料サブスクリプションにアップグレードしたら解決 (無料の範囲で使えば課金されない) 
+  
+![Screenshot_25-12-2025_143824_www oracle com](https://github.com/user-attachments/assets/1f414f1f-7bd1-49dd-9450-87becf50aded)
+
+
+- ssh tool (e.g.PowerShell)
+- java 1.17
+- minecraft-forge 1.20.1
   
 
+---
+## 1. Deployment & Configuration OCI env.   
+### 1-1.Create compartment
 
-## Deployment & Configuration
-### 1.Create compartment
-
-コンパートメント 
 <img width="1307" height="466" alt="Screenshot 2025-12-23 at 15 16 37" src="https://github.com/user-attachments/assets/e3c254a7-a9bc-4b88-a393-e6db92be87b9" /> 
 <img width="1288" height="529" alt="Screenshot 2025-12-23 at 15 19 59" src="https://github.com/user-attachments/assets/cdef06d4-1c95-43dd-a2ef-35289f172a1e" />  
   
 
+### 1-2.Create Network
+- Public networkとIGWを作成
+- private networkは無し 
+- インスタンスのvnicにグローバルipを設定しIGWから直接ルーティングさせる  
+![Screenshot_22-12-2025_231321_cloud oracle com](https://github.com/user-attachments/assets/f9d0071b-2644-4b38-b63e-e769521bf6b2) 
+![Screenshot_22-12-2025_231356_cloud oracle com](https://github.com/user-attachments/assets/90f010fa-0498-4992-bd9a-d18f2e7da5bd) 
+![Screenshot_22-12-2025_231356_cloud oracle com](https://github.com/user-attachments/assets/b0871a30-b50f-4c47-ab39-82e79eed0de3) 
+![Screenshot_22-12-2025_231415_cloud oracle com](https://github.com/user-attachments/assets/56f2bd71-b86d-458f-a90b-a9eeaf1459ac) 
+![Screenshot_22-12-2025_23150_cloud oracle com](https://github.com/user-attachments/assets/f3d9142c-f9b3-4030-b46a-97f4c5f21286)
+![Screenshot_22-12-2025_231436_cloud oracle com](https://github.com/user-attachments/assets/75b5b9f2-a115-4601-8746-a3729b259ae9)  
+![Screenshot_22-12-2025_232231_cloud oracle com](https://github.com/user-attachments/assets/f5da4fa2-dfe9-4140-b7c3-bb53252701db) 
+![Screenshot_22-12-2025_232249_cloud oracle com](https://github.com/user-attachments/assets/2a7e6964-49ac-4513-887e-e2aeddb284e6) 
+![Screenshot_22-12-2025_23232_cloud oracle com](https://github.com/user-attachments/assets/8a25925e-49b5-4c3a-a35e-90469509a6cd) 
+![Screenshot_22-12-2025_232340_cloud oracle com](https://github.com/user-attachments/assets/9f4193f3-fda4-4a38-9813-4b1a2457cbcf) 
+![Screenshot_22-12-2025_232359_cloud oracle com](https://github.com/user-attachments/assets/78a17ce5-334a-4ae8-a683-b6b348f07da5) 
 
 
-### 2.Deploy instance
+### 1-3.Deploy instance
 インスタンス 
 - 名前: 任意 (minecraft-forge-1.20.1) 
 - コンパートメント: デフォルト 
@@ -54,48 +73,172 @@ SSHキーの追加
 
   
 ストレージ
-- ブートボリューム: デフォルト 
+- ブートボリューム: デフォルト サイズは100GB (200GBまで)
 - ブロックボリューム: ひとまずなし  
 
 ![Screenshot_22-12-2025_23746_cloud oracle com](https://github.com/user-attachments/assets/127e2a12-a974-470c-8d53-2b06ed6d13d1)
-![Screenshot_22-12-2025_23918_cloud oracle com](https://github.com/user-attachments/assets/c3bd8eb8-f961-4aa2-8ef2-a84cb831e8b3)
+![Screenshot_22-12-2025_23918_cloud oracle com](https://github.com/user-attachments/assets/9ac7438d-cec5-406f-8bca-7b8d03c48618)
+
+
+### 1-4.Check to access the instance by ssh 
+
+- 開発者シェル > Cloud Shell または other tool (e.g. PowerShell)  
+- 歯車マークからプライベートキーをアップロード 
+- keyファイルのパーミッション変更
+```bash
+ chmod 600 [ssh-key file] 
+```
+- ssh接続確認 
+ ```bash
+ssh -i ~/[sssh key] opc@xx.xxx.xxx.xxx 
+```
+  
+---
+## 2.Configure security rule for minecraft
+- Ingress ruleにマイクラ用のポートを追加 (vpn > subnet > Security rules)
+  ![Screenshot_25-12-2025_132350_cloud oracle com](https://github.com/user-attachments/assets/10901b49-4ef2-452f-a7ee-2dcb43a7c172)
+  ![Screenshot_25-12-2025_13247_cloud oracle com](https://github.com/user-attachments/assets/5357bcd9-257e-499e-b81e-c45526af2cbd)
+  
+- Linux側でもポートの穴あけ
+ ```bash
+ sudo firewall-cmd --add-port=25565/tcp --permanent 
+ sudo firewall-cmd --reload
+```
+  
+---
+## 3.Install Java  
+- repoが設定されているか確認 
+  ```bash
+  sudo dnf repolist
+  ```
+   ```bash
+  sudo dnf list java-17-openjdk
+  ```
+- java 1.17のインストール
+  ```bash
+  sudo dnf install java-17-openjdk
+  ```
+  ```bash
+  java -version
+  ```
+-  Forgeの最新バージョンを確認してDLする(e.g. 1.20.1-47.4.13)
+ ```bash
+curl -s https://files.minecraftforge.net/net/minecraftforge/forge/maven-metadata.json | grep 1.20.1
+```
+ ```bash
+mkdir forge-server-1.20.1-47
+cd forge-server-1.20.1-47
+```
+```bash
+wget https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.20.1-47.4.13/forge-1.20.1-47.4.13-installer.jar
+```
+```bash
+ls -lh forge-1.20.1-47.4.13-installer.jar
+```
+  
+---
+## 4.Install and configure Minecraft Forge
+```bash
+java -jar forge-1.20.1-47.4.13-installer.jar --installServer
+```
+
+- EURAファイルを生成
+```bash
+./run.sh
+```
+
+- EULAに同意する (生成されたeula.txtに記載のeura=faulseをtrueに変更)
+```bash
+vi eula.txt
+```
+
+```bash
+$ cat eula.txt 
+eula=true
+```
+
+- argsの変更 (メモリを増やす -Xmx16G、-Xms4G) 
+```bash
+vi user_jvm_args.txt
+```
+```bash
+$ cat user_jvm_args.txt
+-Xms4G
+-Xmx16G
+```
   
 
+  
+---
+## 5.Configure systemd for minecraft
+- 専用ユーザーを作成
+ ```bash
+sudo useradd -r -m -d /opt/minecraft -s /bin/bash minecraft 
+```
+- Forge ディレクトリを /opt/minecraft に移動
+ ```bash
+sudo mv ~/forge-server-1.20.1-47/* /opt/minecraft/
+sudo chown -R minecraft:minecraft /opt/minecraft
+```
 
-### 3. Create Network
+- systemd ユニットファイルを作成
+ ```bash
+sudo vi /etc/systemd/system/minecraft.service
+```
+* 以下を記載
+```
+[Unit]
+Description=Minecraft Forge Server
+After=network.target
 
-![Screenshot_22-12-2025_231321_cloud oracle com](https://github.com/user-attachments/assets/f9d0071b-2644-4b38-b63e-e769521bf6b2) 
-![Screenshot_22-12-2025_231356_cloud oracle com](https://github.com/user-attachments/assets/90f010fa-0498-4992-bd9a-d18f2e7da5bd) 
-![Screenshot_22-12-2025_231356_cloud oracle com](https://github.com/user-attachments/assets/b0871a30-b50f-4c47-ab39-82e79eed0de3) 
-![Screenshot_22-12-2025_231415_cloud oracle com](https://github.com/user-attachments/assets/56f2bd71-b86d-458f-a90b-a9eeaf1459ac) 
-![Screenshot_22-12-2025_23150_cloud oracle com](https://github.com/user-attachments/assets/f3d9142c-f9b3-4030-b46a-97f4c5f21286)
-![Screenshot_22-12-2025_231436_cloud oracle com](https://github.com/user-attachments/assets/75b5b9f2-a115-4601-8746-a3729b259ae9)  
-![Screenshot_22-12-2025_232231_cloud oracle com](https://github.com/user-attachments/assets/f5da4fa2-dfe9-4140-b7c3-bb53252701db) 
-![Screenshot_22-12-2025_232249_cloud oracle com](https://github.com/user-attachments/assets/2a7e6964-49ac-4513-887e-e2aeddb284e6) 
-![Screenshot_22-12-2025_23232_cloud oracle com](https://github.com/user-attachments/assets/8a25925e-49b5-4c3a-a35e-90469509a6cd) 
-![Screenshot_22-12-2025_232340_cloud oracle com](https://github.com/user-attachments/assets/9f4193f3-fda4-4a38-9813-4b1a2457cbcf) 
-![Screenshot_22-12-2025_232359_cloud oracle com](https://github.com/user-attachments/assets/78a17ce5-334a-4ae8-a683-b6b348f07da5) 
+[Service]
+Type=simple
+User=minecraft
+WorkingDirectory=/opt/minecraft
+
+ExecStart=/bin/bash /opt/minecraft/run.sh nogui
+ExecStop=/bin/bash -c 'echo "stop" | nc localhost 25565'
+Restart=on-failure
+RestartSec=10
+
+TimeoutStopSec=60
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target
+```
+
+- systemdへの反映
+```bash
+sudo systemctl daemon-reload
+```
+
+- 自動起動設定
+```bash
+sudo systemctl enable minecraft
+```
+  
+---
+## 6.Start Minecraft server
+- 起動
+  ```bash
+  sudo systemctl start minecraft 
+  ```
+- 確認
+  ```bash
+  sudo systemctl status minecraft
+  ```
+- 停止
+```bash
+  sudo systemctl stop minecraft 
+```
+- ログ確認
+```bash
+journalctl -u minecraft -f 
+```
 
 
-### 3. Check to access ssh
-
-- 開発者シェル > Cloud Shellを開く
-- 歯車マークからプライベートキーをアップロード、パーミッション変更 
- ```$ chmod 600 [ssh-key file]```
-- sshで接続  
- ```ssh -i ~/[sssh key] opc@xx.xxx.xxx.xxx```
-
-
-### 4. Add security rule for minecraft
-- マイクラ用のポートをセキュリティ・ルールに追加 
 
 
 
 
-
-
-
-
-
-3. 
-4. 
