@@ -161,14 +161,35 @@ ssh -i ~/[sssh key] opc@xx.xxx.xxx.xxx
   $ cat eula.txt 
   eula=true
   ```
-- argsの変更 (最大最小のメモリを増やす、-Xms4G -Xmx16G) 
+- argsの変更  
   ```bash
   vi user_jvm_args.txt
   ```
+- 以下を設定
+  ```
+  -XX:+UnlockExperimentalVMOptions
+  
+  -Xms4G 
+  -Xmx16G 
+  
+  -XX:+UseG1GC 
+  -XX:MaxGCPauseMillis=200 
+  -XX:+ParallelRefProcEnabled 
+  
+  -XX:G1NewSizePercent=20 
+  -XX:G1MaxNewSizePercent=45 
+  -XX:G1ReservePercent=20 
+  
+  -XX:G1HeapRegionSize=16M 
+  
+  -XX:+AlwaysPreTouch 
+  
+  -Dfile.encoding=UTF-8 
+  ```
+
+- 確認 
   ```bash
   $ cat user_jvm_args.txt
-  -Xms4G
-  -Xmx16G
   ```
   
 
