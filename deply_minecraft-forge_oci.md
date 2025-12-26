@@ -1,6 +1,7 @@
 # How to deploy Minecraft Forge server on OCI 
 OCIの無料枠を利用してMinecraft Forge鯖をたてる手順
-  
+
+---
 ## Requirements
 - Oracle Cloud Infrastracture(OCI)のFree Tierアカウント(https://www.oracle.com/jp/cloud/free/) 
   - Tokyo Regionはリソースに空きがないらしいのでOsakaを選択した方がいい
