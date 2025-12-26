@@ -1,16 +1,17 @@
 # How to deploy Minecraft Forge server on OCI 
-Oracle Cloud Infrastracture(OCI)の無料枠のARM VMにOracle Linuxを入れて、Minecraft Forge鯖をたてる手順
+OCIの無料枠を利用してMinecraft Forge鯖をたてる手順
   
 ## Requirements
-- OCIのFree Tierアカウント(https://www.oracle.com/jp/cloud/free/) 
+- Oracle Cloud Infrastracture(OCI)のFree Tierアカウント(https://www.oracle.com/jp/cloud/free/) 
   - Tokyo Regionはリソースに空きがないらしいのでOsakaを選択した方がいい
   - Free TierのままだとOsakaでもリソースがないというapiエラーになる。有料サブスクリプションにアップグレードしたら解決 (無料の範囲で使えば課金されない)
+  - 無料枠でおさめるならARM 4ocpu, 24GBRAMのLinuxインスタンス1個
 - SSHクライアント(e.g.PowerShell)
 - Java 1.17
 - Minecraft-forge 1.20.1 
 
     
-3,000 OCPU hours and 18,000 GB hours per month > 4OCPU & 24GB per 31 days  
+3,000 OCPU hours and 18,000 GB hours per month > 4OCPU & 24GB for a ARM VM per 31 days  
 ![Screenshot_25-12-2025_143824_www oracle com](https://github.com/user-attachments/assets/1f414f1f-7bd1-49dd-9450-87becf50aded) 
   
   
@@ -20,7 +21,7 @@ Oracle Cloud Infrastracture(OCI)の無料枠のARM VMにOracle Linuxを入れて
 ---
 ## 1. Deployment & Configuration OCI env.   
 ### 1-1.Create compartment
-- サブコンパートメントの作成(作らなくても動くけど作った方がいい) 
+- サブコンパートメントの作成(作らなくてもいいけど作った方がいい) 
 
 <img width="1307" height="466" alt="Screenshot 2025-12-23 at 15 16 37" src="https://github.com/user-attachments/assets/e3c254a7-a9bc-4b88-a393-e6db92be87b9" /> 
 <img width="1288" height="529" alt="Screenshot 2025-12-23 at 15 19 59" src="https://github.com/user-attachments/assets/cdef06d4-1c95-43dd-a2ef-35289f172a1e" />  
