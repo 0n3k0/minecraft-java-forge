@@ -1,4 +1,4 @@
-# How to deploy mod files to Minecraft-Forge server on OCI 
+# How to install mod files to Minecraft-Forge server on OCI 
 Minecraft-Forge鯖にmodファイルを追加する方法  
 
 
